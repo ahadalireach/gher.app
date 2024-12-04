@@ -70,25 +70,35 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16.0),
-            Align(
-              alignment: Alignment.center,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[600],
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 12.0),
+                    vertical: 16,
+                  ),
+                  elevation: 2,
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PropertiesScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => PropertiesScreen(),
+                    ),
                   );
                 },
-                child: const Text(
-                  'Explore Properties',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
+                child: const Center(
+                  child: Text(
+                    'Explore Properties',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

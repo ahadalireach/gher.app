@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'screens/homeScreen.dart';
+import 'screens/splashScreen.dart';
 import 'screens/aboutScreen.dart';
 import 'screens/propertiesScreen.dart';
 import 'screens/profileScreen.dart';
@@ -23,6 +24,20 @@ class _MyRealEstateAppState extends State<MyRealEstateApp> {
   ];
 
   int _selectedIndex = 0;
+  bool _isSplashComplete = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startSplashScreen();
+  }
+
+  void _startSplashScreen() async {
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      _isSplashComplete = true;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -31,55 +46,51 @@ class _MyRealEstateAppState extends State<MyRealEstateApp> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(kToolbarHeight + 20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: Colors.white,
-        child: Row(
-          children: [
-            Flexible(
-              flex: 4,
-              child: Image.asset(
-                'assets/headerLogo.png',
-                fit: BoxFit.contain,
-                height: 50,
+    return AppBar(
+      backgroundColor: Colors.green,
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          Image.asset(
+            'assets/headerLogo.png',
+            fit: BoxFit.contain,
+            height: 40,
+            width: 150,
+          ),
+          const Spacer(flex: 1),
+          Flexible(
+            flex: 5,
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
               ),
-            ),
-            const Spacer(flex: 1),
-            Flexible(
-              flex: 5,
-              child: Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.search, color: Colors.grey),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search, color: Colors.grey),
+                    onPressed: () {},
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -113,6 +124,13 @@ class _MyRealEstateAppState extends State<MyRealEstateApp> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isSplashComplete) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
+      );
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Gher.com',

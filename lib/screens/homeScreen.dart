@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../widgets/propertyCard.dart';
+import './propertiesScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'id': property['_id'],
               'title': property['title'],
               'description': property['description'],
-              'price': property['regularDiscount'].toString(),
+              'price': property['regularPrice'].toString(),
               'image': property['imageUrls'][0],
               'bedrooms': property['bedrooms'],
               'bathrooms': property['bathrooms'],
@@ -61,14 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFE8F5E9), Colors.white],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+          Padding(
+            padding: const EdgeInsets.only(top: 32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -79,24 +74,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Real Estate Agency',
                     style: TextStyle(
                       color: Colors.green,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      shadows: [
+                        Shadow(
+                          color: Colors.grey,
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     'Find Your\nDream Home',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 36,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
+                      height: 1.2,
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
@@ -104,10 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16,
+                      height: 1.5,
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ElevatedButton(
@@ -115,24 +119,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
                         vertical: 16,
                       ),
+                      elevation: 2,
                     ),
-                    onPressed: () {},
-                    child: const Text(
-                      'View Properties',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PropertiesScreen(),
+                        ),
+                      );
+                    },
+                    child: const Center(
+                      child: Text(
+                        'View Properties',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 40),
                 Image.asset(
                   'assets/heroBanner.jpg',
                   height: 200,
@@ -147,21 +160,73 @@ class _HomeScreenState extends State<HomeScreen> {
               ? const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(
-                        color: Colors.green,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        strokeWidth: 6.0,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Loading Properties...',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
                 )
               : hasError
-                  ? const Center(
-                      child: Text(
-                        'Failed to load properties. Please try again later.',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 60,
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'Failed to load properties. Please try again later.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                isLoading = true;
+                                hasError = false;
+                              });
+                              fetchProperties();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.green,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 24),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: 2,
+                            ),
+                            child: const Text(
+                              'Retry',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   : Padding(
@@ -185,12 +250,28 @@ class _HomeScreenState extends State<HomeScreen> {
           if (!isLoading && !hasError)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              child: TextButton(
-                onPressed: () {},
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropertiesScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  elevation: 2,
+                ),
                 child: const Text(
                   'View All Properties',
                   style: TextStyle(
-                    color: Colors.green,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, library_private_types_in_public_api, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -79,154 +79,213 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Properties'),
-        backgroundColor: Colors.green,
-        elevation: 4,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_alt),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) => Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Search by Title',
-                          labelStyle: TextStyle(color: Colors.green),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.green),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            filterText = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      DropdownButton<String>(
-                        value: sortOption,
-                        isExpanded: true,
-                        icon: const Icon(Icons.sort, color: Colors.green),
-                        items: <String>['Sort by Price', 'Sort by Oldest']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            sortOption = newValue!;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            filterText = '';
-                            sortOption = 'Sort by Price';
-                          });
-                          Navigator.of(context).pop();
-                        },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.clear_all,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              'Clear Filters',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          shadowColor: Colors.greenAccent.withOpacity(0.4),
-                          elevation: 10,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+        appBar: AppBar(
+          title: const Text(
+            'Properties',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 24),
-            isLoading
-                ? Center(
+          backgroundColor: Colors.green,
+          elevation: 4,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.filter_alt),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.white,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        CircularProgressIndicator(
-                          color: Colors.green,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Search by Title',
+                            labelStyle: TextStyle(color: Colors.green),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.green),
+                            ),
+                            prefixIcon:
+                                const Icon(Icons.search, color: Colors.green),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              filterText = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        DropdownButton<String>(
+                          value: sortOption,
+                          isExpanded: true,
+                          icon: const Icon(Icons.sort, color: Colors.green),
+                          items: <String>['Sort by Price', 'Sort by Oldest']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              sortOption = newValue!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              filterText = '';
+                              sortOption = 'Sort by Price';
+                            });
+                            Navigator.of(context).pop();
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.clear_all,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'Clear Filters',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            shadowColor: Colors.greenAccent.withOpacity(0.4),
+                            elevation: 10,
+                          ),
                         ),
                       ],
                     ),
-                  )
-                : hasError
-                    ? Center(
-                        child: Text(
-                          'Failed to load properties. Please try again later.',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: 0.7,
-                          ),
-                          itemCount: filteredProperties.length,
-                          itemBuilder: (context, index) {
-                            return PropertyCard(
-                                property: filteredProperties[index]);
-                          },
-                        ),
-                      ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+              isLoading
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.green),
+                            strokeWidth: 6.0,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Loading Properties...',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : hasError
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
+                                size: 60,
+                              ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                'Failed to load properties. Please try again later.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isLoading = true;
+                                    hasError = false;
+                                  });
+                                  fetchProperties();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.green,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 24),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  elevation: 2,
+                                ),
+                                child: const Text(
+                                  'Retry',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Center(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: 0.7,
+                              ),
+                              itemCount: filteredProperties.length,
+                              itemBuilder: (context, index) {
+                                return PropertyCard(
+                                    property: filteredProperties[index]);
+                              },
+                            ),
+                          ),
+                        ),
+            ],
+          ),
+        ));
   }
 }
